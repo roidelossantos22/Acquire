@@ -1,11 +1,11 @@
-import { supabase, isSupabaseConfigured } from './supabase'
+import { supabase } from './supabase'
 
 // Production-ready auth service that uses Supabase authentication
 export const authService = {
   // Login function
   async login(email: string, password: string) {
-    if (!isSupabaseConfigured || !supabase) {
-      return { success: false, error: 'Authentication service not configured' }
+    if (!supabase) {
+      return { success: false, error: 'Authentication service not configured. Please contact administrator.' }
     }
 
     try {
@@ -30,8 +30,8 @@ export const authService = {
         }
       } catch (dbError) {
         console.error('Database error fetching user role:', dbError)
-        // If user doesn't exist in users table, default to team_member
-        role = 'team_member'
+        // If user doesn't exist in users table, deny access
+        return { success: false, error: 'User account not found in database. Please contact administrator.' }
       }
 
       localStorage.setItem('isAuthenticated', 'true')
@@ -48,7 +48,7 @@ export const authService = {
 
   // Logout function
   async logout() {
-    if (isSupabaseConfigured && supabase) {
+    if (supabase) {
       await supabase.auth.signOut()
     }
 
@@ -80,7 +80,7 @@ export const authService = {
 
   // Create new user (admin only)
   async createUser(email: string, password: string, firstName: string, lastName: string, role: string) {
-    if (!isSupabaseConfigured || !supabase) {
+    if (!supabase) {
       return { success: false, error: 'Authentication service not configured' }
     }
 
@@ -95,7 +95,7 @@ export const authService = {
         email,
         password,
         options: {
-          emailConfirm: true // Auto-confirm email
+          emailRedirectTo: undefined // Auto-confirm will be handled by database trigger
         }
       })
 

@@ -1,22 +1,18 @@
-import { supabase, isSupabaseConfigured } from './supabase'
+import { supabase } from './supabase'
 import { categories as mockCategories, workflows as mockWorkflows, scripts as mockScripts } from './mock-data'
 
 // Helper function to check if supabase is available
 const checkSupabase = () => {
-  if (!supabase || !isSupabaseConfigured) {
+  if (!supabase) {
     throw new Error('Supabase not configured')
   }
   return supabase
 }
 
-// Data service that uses Supabase if configured, otherwise falls back to mock data
+// Data service that uses Supabase with fallback to mock data for development
 export const dataService = {
   // Get categories
   async getCategories() {
-    if (!isSupabaseConfigured) {
-      return mockCategories
-    }
-
     try {
       const client = checkSupabase()
       
@@ -35,16 +31,12 @@ export const dataService = {
       }))
     } catch (error) {
       console.error('Error fetching categories:', error)
-      return mockCategories
+      return mockCategories // Fallback to mock data
     }
   },
 
   // Get workflows
   async getWorkflows() {
-    if (!isSupabaseConfigured) {
-      return mockWorkflows
-    }
-
     try {
       const client = checkSupabase()
       
@@ -82,10 +74,6 @@ export const dataService = {
 
   // Get workflow by ID
   async getWorkflowById(id: number) {
-    if (!isSupabaseConfigured) {
-      return mockWorkflows.find(w => w.id === id) || mockWorkflows[0]
-    }
-
     try {
       const client = checkSupabase()
       
@@ -124,15 +112,6 @@ export const dataService = {
 
   // Search workflows
   async searchWorkflows(query: string) {
-    if (!isSupabaseConfigured) {
-      return mockWorkflows.filter(wf =>
-        wf.title.toLowerCase().includes(query.toLowerCase()) ||
-        wf.description.toLowerCase().includes(query.toLowerCase()) ||
-        wf.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase())) ||
-        wf.category.toLowerCase().includes(query.toLowerCase())
-      )
-    }
-
     try {
       const client = checkSupabase()
       
@@ -169,10 +148,6 @@ export const dataService = {
 
   // Get scripts
   async getScripts() {
-    if (!isSupabaseConfigured) {
-      return mockScripts
-    }
-
     try {
       const client = checkSupabase()
       
@@ -200,13 +175,6 @@ export const dataService = {
 
   // Get workflows by category
   async getWorkflowsByCategory(categorySlug: string) {
-    if (!isSupabaseConfigured) {
-      return mockWorkflows.filter(wf => {
-        const mockSlug = wf.category.toLowerCase().replace(/\s+/g, '-')
-        return mockSlug === categorySlug
-      })
-    }
-
     try {
       const client = checkSupabase()
       
