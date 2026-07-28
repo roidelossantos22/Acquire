@@ -86,8 +86,7 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-gray-200 text-center text-sm text-gray-600">
-          <p>For demo: use any email/password</p>
-          <p className="mt-1">Include 'admin' in email for admin access</p>
+          <p>Contact your administrator for account access</p>
         </div>
       </Card>
     </div>

@@ -8,6 +8,7 @@ import {
   AlertTriangle, 
   TrendingUp, 
   Search,
+  UserPlus,
   Users,
   MessageSquare,
   Settings,
@@ -82,10 +83,14 @@ export default function AdminDashboardPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Quick Actions */}
-        <div className="mb-8">
+        <div className="mb-8 space-x-4">
           <Button size="lg" onClick={() => router.push('/admin/workflows/create')}>
             <Plus className="w-5 h-5 mr-2" />
             Create New Workflow
+          </Button>
+          <Button size="lg" variant="outline" onClick={() => router.push('/admin/users')}>
+            <UserPlus className="w-5 h-5 mr-2" />
+            Manage Users
           </Button>
         </div>
 
