@@ -39,7 +39,7 @@ export default function CategoryPage() {
                 Back
               </Button>
               <div className="h-6 w-px bg-gray-300" />
-              <h1 className="text-lg font-semibold text-gray-900 capitalize">{params.slug?.replace(/-/g, ' ')}</h1>
+              <h1 className="text-lg font-semibold text-gray-900 capitalize">{Array.isArray(params.slug) ? params.slug[0]?.replace(/-/g, ' ') : params.slug?.replace(/-/g, ' ')}</h1>
             </div>
             <div className="flex items-center space-x-2">
               <Button variant="outline" size="sm" onClick={() => router.push('/dashboard')}>
@@ -55,7 +55,7 @@ export default function CategoryPage() {
         <Card className="p-6 mb-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2 capitalize">{params.slug?.replace(/-/g, ' ')}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2 capitalize">{Array.isArray(params.slug) ? params.slug[0]?.replace(/-/g, ' ') : params.slug?.replace(/-/g, ' ')}</h1>
               <p className="text-gray-600">
                 {loading ? 'Loading...' : `${categoryWorkflows.length} workflows in this category`}
               </p>
