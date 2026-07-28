@@ -49,7 +49,7 @@ export default function CreateWorkflowPage() {
   const handleSave = async (publish: boolean = false) => {
     setSaving(true)
     try {
-      if (isSupabaseConfigured) {
+      if (isSupabaseConfigured && supabase) {
         // Save to Supabase
         const { data, error } = await supabase
           .from('workflows')
