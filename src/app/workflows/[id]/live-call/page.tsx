@@ -148,7 +148,7 @@ export default function LiveCallPage() {
                 {currentStepData.question}
               </h2>
               <div className="space-y-4">
-                {currentStepData.options.map((option: string) => (
+                {currentStepData.options?.map((option: string) => (
                   <Button
                     key={option}
                     size="lg"

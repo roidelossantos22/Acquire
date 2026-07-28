@@ -14,26 +14,36 @@ export const authService = {
     }
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const response = await supabase?.auth.signInWithPassword({
         email,
         password
       })
 
-      if (error) throw error
+      if (!response) {
+        throw new Error('Supabase not configured')
+      }
+
+      if (response.error) throw response.error
 
       // Get user role from database
-      const { data: userData } = await supabase
-        .from('users')
-        .select('*, roles(*)')
-        .eq('email', email)
-        .single()
-
-      const role = userData?.roles?.name || 'team_member'
+      let role = 'team_member'
+      if (supabase) {
+        try {
+          const { data: userData } = await supabase
+            .from('users')
+            .select('*, roles(*)')
+            .eq('email', email)
+            .single()
+          role = userData?.roles?.name || 'team_member'
+        } catch (dbError) {
+          console.error('Database error:', dbError)
+        }
+      }
 
       localStorage.setItem('isAuthenticated', 'true')
       localStorage.setItem('userRole', role)
       localStorage.setItem('userEmail', email)
-      localStorage.setItem('userId', data.user.id)
+      localStorage.setItem('userId', response.data.user.id)
 
       return { success: true, role }
     } catch (error) {
@@ -44,7 +54,7 @@ export const authService = {
 
   // Logout function
   async logout() {
-    if (isSupabaseConfigured) {
+    if (isSupabaseConfigured && supabase) {
       await supabase.auth.signOut()
     }
 

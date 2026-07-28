@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Search, Filter, Phone, Clock, BookOpen } from 'lucide-react'
 import Button from '@/components/Button'
@@ -9,7 +9,7 @@ import Card from '@/components/Card'
 import { useRouter } from 'next/navigation'
 import { dataService } from '@/lib/data-service'
 
-export default function SearchPage() {
+function SearchPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [query, setQuery] = useState(searchParams.get('q') || '')
@@ -247,5 +247,13 @@ export default function SearchPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>}>
+      <SearchPageContent />
+    </Suspense>
   )
 }

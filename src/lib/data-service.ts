@@ -1,6 +1,14 @@
 import { supabase, isSupabaseConfigured } from './supabase'
 import { categories as mockCategories, workflows as mockWorkflows, scripts as mockScripts } from './mock-data'
 
+// Helper function to check if supabase is available
+const checkSupabase = () => {
+  if (!supabase || !isSupabaseConfigured) {
+    throw new Error('Supabase not configured')
+  }
+  return supabase
+}
+
 // Data service that uses Supabase if configured, otherwise falls back to mock data
 export const dataService = {
   // Get categories
@@ -10,7 +18,9 @@ export const dataService = {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = checkSupabase()
+      
+      const { data, error } = await client
         .from('categories')
         .select('*')
         .eq('is_active', true)
@@ -36,7 +46,9 @@ export const dataService = {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = checkSupabase()
+      
+      const { data, error } = await client
         .from('workflows')
         .select(`
           *,
@@ -75,7 +87,9 @@ export const dataService = {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = checkSupabase()
+      
+      const { data, error } = await client
         .from('workflows')
         .select(`
           *,
@@ -120,7 +134,9 @@ export const dataService = {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = checkSupabase()
+      
+      const { data, error } = await client
         .from('workflows')
         .select(`
           *,
@@ -158,7 +174,9 @@ export const dataService = {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = checkSupabase()
+      
+      const { data, error } = await client
         .from('scripts')
         .select('*')
         .eq('is_active', true)
@@ -190,7 +208,9 @@ export const dataService = {
     }
 
     try {
-      const { data, error } = await supabase
+      const client = checkSupabase()
+      
+      const { data, error } = await client
         .from('workflows')
         .select(`
           *,
